@@ -10,7 +10,6 @@ namespace lit {
     namespace args {
         namespace defargs {
             extern std::unordered_map<std::string, void(*)(std::optional<std::vector<std::string>>)> default_arguments;
-
         }
 
     }
