@@ -5,8 +5,6 @@
 #include <string>
 #include <unordered_map>
 
-#include <boost/json.hpp>
-
 #include <ModulesInteraction/ModulesInteraction.hxx>
 
 namespace lit {
