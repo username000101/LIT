@@ -2,6 +2,7 @@
 #define TERMINALIO_HXX
 
 #include <iostream>
+#include <unordered_set>
 #include <unordered_map>
 
 namespace utils {
@@ -29,6 +30,8 @@ namespace utils {
             std::getline(std::cin, buffer);
             return buffer;
         }
+
+        std::string console_choice(const std::string& promt, std::unordered_set<std::string> choice_variants);
     }
 }
 

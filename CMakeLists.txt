@@ -54,13 +54,14 @@ include_directories(
 )
 
 file(GLOB LIT "main.cxx")
-file(GLOB Args "src/Args/*.cxx")
-file(GLOB Auth "src/Auth/*.cxx")
-file(GLOB Configuration "src/Configuration/*.cxx")
-file(GLOB Filesystem "src/Filesystem/*.cxx")
-file(GLOB ModulesInteraction "src/ModulesInteraction/*.cxx")
-file(GLOB TelegramAPIInteraction "src/TelegramAPIInteraction/*.cxx")
-file(GLOB XLML "src/XLML/*.cxx")
+file(GLOB Args "src/Args/*.cxx" "include/Args/*.hxx")
+file(GLOB Auth "src/Auth/*.cxx" "include/Auth/*.hxx")
+file(GLOB Configuration "src/Configuration/*.cxx" "include/Configuration/*.hxx")
+file(GLOB Filesystem "src/Filesystem/*.cxx" "include/Filesystem/*.hxx")
+file(GLOB ModulesInteraction "src/ModulesInteraction/*.cxx" "include/ModulesInteraction/*.hxx")
+file(GLOB TelegramAPIInteraction "src/TelegramAPIInteraction/*.cxx" "include/TelegramAPIInteraction/*.hxx")
+file(GLOB Utils "src/Utils/*.cxx" "include/Utils/*.hxx")
+file(GLOB XLML "src/XLML/*.cxx" "include/XLML/*.hxx")
 
 add_executable(LIT
 	${LIT}
@@ -70,6 +71,7 @@ add_executable(LIT
 	${Filesystem}
 	${ModulesInteraction}
 	${TelegramAPIInteraction}
+        ${Utils}
 	${XLML}
 )
 
