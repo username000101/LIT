@@ -17,6 +17,12 @@ void lit::td_api::lit_loop() {
     using runtime_storage::LITRequestId;
 
     LITClient = std::make_shared<td::ClientManager>();
+    if (!LITClient) {
+        logger->log(spdlog::level::critical,
+                    "{}: Loop failed: LITClient is not created(maybe std::make_shared returns nullptr)",
+                    __FUNCTION__);
+    }
+
     LITClient->execute(td::td_api::make_object<td::td_api::setLogVerbosityLevel>(0));
 
     auto response = get_response(std::move(td::td_api::make_object<td::td_api::getAuthorizationState>()), 1);

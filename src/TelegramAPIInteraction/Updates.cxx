@@ -17,17 +17,18 @@ td::ClientManager::Response lit::td_api::get_response(td::td_api::object_ptr<td:
     static auto logger = spdlog::get("LIT");
     ASSERT(logger, "The 'LIT' logger is not initialized");
 
+    using runtime_storage::LITClient;
     using runtime_storage::LITConfig;
     using runtime_storage::LITRequestId;
-    static td::ClientManager::ClientId gl_client_id = runtime_storage::LITClient->create_client_id();
+    static td::ClientManager::ClientId client_id = LITClient->create_client_id();
 
     if (req_id == 0)
         return {};
     gl_mutex.lock();
 
-    gl_client->send(gl_client_id, req_id, std::move(req));
+    LITClient->send(client_id, req_id, std::move(req));
     for (int attempts = 1; attempts < LIT_TDLIB_ATTEMPTS; ++attempts) {
-        auto result = gl_client->receive(LIT_TDLIB_TIMEOUT);
+        auto result = LITClient->receive(LIT_TDLIB_TIMEOUT);
         if (!result.object) {
             logger->log(spdlog::level::warn,
                 "{}: Invalid response received(object == nullptr; request_id == {})",
