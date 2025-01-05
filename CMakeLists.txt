@@ -59,6 +59,7 @@ file(GLOB Auth "src/Auth/*.cxx" "include/Auth/*.hxx")
 file(GLOB Configuration "src/Configuration/*.cxx" "include/Configuration/*.hxx")
 file(GLOB Filesystem "src/Filesystem/*.cxx" "include/Filesystem/*.hxx")
 file(GLOB ModulesInteraction "src/ModulesInteraction/*.cxx" "include/ModulesInteraction/*.hxx")
+file(GLOB RuntimeStorage "include/RuntimeStorage/*.hxx")
 file(GLOB TelegramAPIInteraction "src/TelegramAPIInteraction/*.cxx" "include/TelegramAPIInteraction/*.hxx")
 file(GLOB Utils "src/Utils/*.cxx" "include/Utils/*.hxx")
 file(GLOB XLML "src/XLML/*.cxx" "include/XLML/*.hxx")
@@ -70,6 +71,7 @@ add_executable(LIT
 	${Configuration}
 	${Filesystem}
 	${ModulesInteraction}
+        ${RuntimeStorage}
 	${TelegramAPIInteraction}
         ${Utils}
 	${XLML}
@@ -93,7 +95,7 @@ target_compile_definitions(LIT PRIVATE
     LIT_TDLIB_DATABASE_DIR="${LIT_INSTALL_PREFIX}/tdlib/db"
     LIT_TDLIB_FILES_DIR="${LIT_INSTALL_PREFIX}/tdlib/files"
     LIT_TDLIB_TIMEOUT=15.0
-    LIT_TDLIB_ATTEMPTS=15
+    LIT_TDLIB_ATTEMPTS=150
 )
 
 target_link_libraries(LIT PUBLIC
