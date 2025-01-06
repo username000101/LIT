@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.31)
 
-set(LIT_VERSION "0.0.1")
+set(LIT_VERSION "0.1.0")
 set(LIT_VERSION_TYPE "Alpha")
 
 project(
