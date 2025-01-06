@@ -9,7 +9,7 @@
 
 namespace utils {
 
-    template <typename FunctionSignature, typename... FunctionArguments> FunctionSignature getFunction
+    template <typename FunctionSignature, typename... FunctionArguments> FunctionSignature get_function
     (void* handle, const std::string& function_name, FunctionArguments&&... function_args) {
         if (!handle) {
             spdlog::log(spdlog::level::err,
@@ -32,7 +32,7 @@ namespace utils {
         return function;
     }
 
-    template <typename FunctionSignature> FunctionSignature getFunction
+    template <typename FunctionSignature> FunctionSignature get_function
     (void* handle, const std::string& function_name) {
         if (!handle) {
             spdlog::log(spdlog::level::err,

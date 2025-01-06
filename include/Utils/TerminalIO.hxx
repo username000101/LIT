@@ -1,5 +1,5 @@
-#ifndef TERMINALIO_HXX
-#define TERMINALIO_HXX
+#ifndef LIT_UTILS_TERMINALIO_HXX
+#define LIT_UTILS_TERMINALIO_HXX
 
 #include <iostream>
 #include <unordered_set>
@@ -35,4 +35,4 @@ namespace utils {
     }
 }
 
-#endif //TERMINALIO_HXX
+#endif // LIT_UTILS_TERMINALIO_HXX
