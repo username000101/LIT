@@ -9,7 +9,7 @@
 
 #include <Utils/Macros.hxx>
 
-std::unordered_map<std::filesystem::path, lit::modules_interaction::ModuleInfo> lit::xlml::read_modules_configuration(
+std::unordered_map<std::string, lit::modules_interaction::ModuleInfo> lit::xlml::read_modules_configuration(
     const std::filesystem::path& modules_configuration_file) {
     static auto logger = spdlog::get("XLML");
     ASSERT(logger, "The 'XLML' logger is not initialized");
@@ -29,7 +29,7 @@ std::unordered_map<std::filesystem::path, lit::modules_interaction::ModuleInfo> 
         std::abort();
     }
 
-    std::unordered_map<std::filesystem::path, modules_interaction::ModuleInfo> result;
+    std::unordered_map<std::string, modules_interaction::ModuleInfo> result;
     auto json = nlohmann::json::parse(read_file);
     read_file.close();
 
@@ -52,6 +52,12 @@ std::unordered_map<std::filesystem::path, lit::modules_interaction::ModuleInfo> 
             continue;
         }
         path = module.at("path").get<std::string>();
+        if (!std::filesystem::exists(path)) {
+            logger->log(spdlog::level::debug,
+                        "{}: Invalid path for module",
+                        __FUNCTION__);
+            continue;
+        }
 
         if (!module.contains("name")) {
             logger->log(spdlog::level::warn,
@@ -94,14 +100,17 @@ std::unordered_map<std::filesystem::path, lit::modules_interaction::ModuleInfo> 
         for (auto& alias : module.at("aliases").items()) {
             aliases[alias.key()] = alias.value().get<std::string>();
         }
-        logger->log(spdlog::level::trace,
+        logger->log(spdlog::level::debug,
                     "{}: {} aliases has been loaded for module '{}'",
                     __FUNCTION__, aliases.size(), path.string());
-        result[path] = std::move(modules_interaction::ModuleInfo(path, name, version, aliases, author, description));
+
+        for (auto& alias : aliases) {
+            logger->log(spdlog::level::debug,
+                        "{}: Register alias '{}' for module '{}'",
+                        __FUNCTION__, alias.first, name);
+            result[alias.first] = std::move(modules_interaction::ModuleInfo(path, name, version, aliases, author, description));
+        }
     }
 
-    logger->log(spdlog::level::trace,
-                "{}: {} modules has been loaded",
-                __FUNCTION__, result.size());
     return result;
 }

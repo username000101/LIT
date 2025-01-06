@@ -9,7 +9,7 @@
 
 namespace lit {
     namespace xlml {
-        std::unordered_map<std::filesystem::path, modules_interaction::ModuleInfo> read_modules_configuration(
+        std::unordered_map<std::string, modules_interaction::ModuleInfo> read_modules_configuration(
                     const std::filesystem::path& modules_config_file = lit::env::vars::get_lit_modules_config());
     }
 }
