@@ -11,8 +11,9 @@ project(
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++ -Wl,--export-dynamic -Wno-unused-command-line-argument")
 set(CMAKE_C_COMPILER "/usr/bin/clang")
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 
 find_package(spdlog REQUIRED)
@@ -76,6 +77,8 @@ add_executable(LIT
         ${Utils}
 	${XLML}
 )
+
+target_compile_options(LIT PRIVATE -fvisibility=hidden)
 
 target_compile_definitions(LIT PUBLIC
    LIT_VERSION="${LIT_VERSION}"
