@@ -13,7 +13,7 @@ namespace utils {
 
         template <Stringable... InputData> std::string bindStrings(InputData&&... data) {
             std::ostringstream oss;
-            (oss << ... << data) << std::endl;
+            (oss << ... << data);
             return oss.str();
         }
 }
