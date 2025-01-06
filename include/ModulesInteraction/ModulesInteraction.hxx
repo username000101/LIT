@@ -8,11 +8,8 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 #include <spdlog/spdlog.h>
-
-#include <Utils/Macros.hxx>
 
 namespace lit {
     namespace modules_interaction {
@@ -76,57 +73,7 @@ namespace lit {
             std::string description_;
             std::filesystem::path module_path_;
         };
-
-        class ModuleLoader {
-        public:
-
-            struct ModuleCommands {
-                   ModuleCommands(int(*startf)(void(*)(const std::string&)),
-                                  int(*stopf)(),
-                                  std::string(*configf)()) :
-                                  start_function_(startf),
-                                  stop_function_(stopf),
-                                  config_function_(configf) {}
-
-                   int start(void(*writef)(const std::string&)) { return this->start_function_(writef); }
-                   int stop() { return this->stop_function_(); }
-                   std::string config() { return this->config_function_(); }
-            private:
-                int(*start_function_)(void(*)(const std::string&));
-                int(*stop_function_)();
-                std::string(*config_function_)();
-            };
-
-            ModuleLoader(std::shared_ptr<ModuleInfo> minfo) : module_info_(minfo) {}
-            ~ModuleLoader() {
-                spdlog::log(spdlog::level::warn, "{}: Calling the Module loader destructor(possibly closing library handle)", __FUNCTION__);
-                if (this->library_)
-                    dlclose(this->library_);
-            }
-
-            [[nodiscard]] std::optional<ModuleCommands> load_module();
-        private:
-            std::vector<bool> try_functions(std::vector<std::string>&& functions);
-
-            void* library_;
-            std::shared_ptr<ModuleInfo> module_info_;
-        };
-
-        class ModuleManager {
-        public:
-            ModuleManager(std::shared_ptr<ModuleInfo> minfo, std::shared_ptr<ModuleLoader> mloader) : module_loader_(mloader), module_info_(minfo) {
-                if (!std::filesystem::exists(module_info_->module_path()))
-                    throw std::invalid_argument("Module path does not exist");
-            }
-
-            [[nodiscard]] std::shared_ptr<ModuleInfo> get_info() const noexcept { return this->module_info_; }
-            [[nodiscard]] std::shared_ptr<ModuleLoader> get_loader() const noexcept { return this->module_loader_; }
-        private:
-            std::shared_ptr<ModuleLoader> module_loader_;
-            std::shared_ptr<ModuleInfo> module_info_;
-
-        };
-    } // namespace modules_interaction
-} // namespace lit
+    }
+}
 
 #endif // LIT_MODULESINTERACTION_MODULESINTERACTION_HXX
