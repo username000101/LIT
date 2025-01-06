@@ -19,4 +19,6 @@
 #define LIT_SPDLOG_MAKE_STDOUT_SINK() std::make_shared<spdlog::sinks::stdout_color_sink_mt>()
 
 #define ENV(varname) std::getenv(varname)
+
+#define LIT_EXPORT __attribute__((visibility("default")))
 #endif // LIT_UTILS_MACROS_HXX
