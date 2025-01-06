@@ -20,13 +20,13 @@ td::ClientManager::Response lit::td_api::get_response(td::td_api::object_ptr<td:
     using runtime_storage::LITClient;
     using runtime_storage::LITConfig;
     using runtime_storage::LITRequestId;
-    static td::ClientManager::ClientId client_id = LITClient->create_client_id();
+    using runtime_storage::LITClientId;
 
     if (req_id == 0)
         return {};
     gl_mutex.lock();
 
-    LITClient->send(client_id, req_id, std::move(req));
+    LITClient->send(LITClientId, req_id, std::move(req));
     for (int attempts = 1; attempts < LIT_TDLIB_ATTEMPTS; ++attempts) {
         auto result = LITClient->receive(LIT_TDLIB_TIMEOUT);
         if (!result.object) {
@@ -43,6 +43,9 @@ td::ClientManager::Response lit::td_api::get_response(td::td_api::object_ptr<td:
         }
     }
 
+    logger->log(spdlog::level::warn,
+                "{}: Attempts ended, but no response was received for the request with request_id {}",
+                __FUNCTION__, req_id);
     gl_mutex.unlock();
     return {};
 }
