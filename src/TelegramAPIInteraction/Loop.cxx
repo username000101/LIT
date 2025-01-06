@@ -5,8 +5,9 @@
 #include <td/telegram/Client.h>
 #include <spdlog/spdlog.h>
 
-#include <Auth/TDLibAuthentification.hxx>
+#include <XLML/ExecModule.hxx>
 #include <RuntimeStorage/RuntimeStorage.hxx>
+#include <Auth/TDLibAuthentification.hxx>
 #include <Utils/Macros.hxx>
 #include <TelegramAPIInteraction/Updates.hxx>
 
@@ -90,6 +91,7 @@ void lit::td_api::lit_loop() {
                         logger->log(spdlog::level::info,
                                     "{}: The outgoing message may be a command\ntext='{}'",
                                     __FUNCTION__, message_content->text_->text_);
+                        xlml::start_module(message_content->text_->text_, std::move(message->message_));
                     }
                 }
             }
