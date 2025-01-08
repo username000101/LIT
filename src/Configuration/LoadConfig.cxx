@@ -6,6 +6,7 @@
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
+#include <RuntimeStorage/RuntimeStorage.hxx>
 #include <Utils/Macros.hxx>
 
 lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
@@ -39,7 +40,7 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
     }
     dir = config.at("dir").get<std::string>();
 
-    if (!config.contains("version")) {
+    [[unlikely]] if (!config.contains("version")) {
         logger->log(spdlog::level::warn,
                     "{}: The LIT configuration is incomplete (the 'version' field is missing), the 'LIT_VERSION' macro will be used",
                     __PRETTY_FUNCTION__);
@@ -47,7 +48,7 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
     } else
         version = config.at("version").get<std::string>();
 
-    if (!config.contains("td_settings")) {
+    [[unlikely]] if (!config.contains("td_settings")) {
         logger->log(spdlog::level::critical,
                     "{}: The LIT configuration is corrupted (the 'td_settings' object is missing)",
                     __PRETTY_FUNCTION__);
@@ -55,7 +56,7 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
     }
     auto config_td_settings = config.at("td_settings");
 
-    if (!config_td_settings.contains("api_id")) {
+    [[unlikely]] if (!config_td_settings.contains("api_id")) {
         logger->log(spdlog::level::critical,
                     "{}: The LIT configuration is corrupted (the 'td_settings'::'api_id' field is missing)",
                     __PRETTY_FUNCTION__);
@@ -63,7 +64,7 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
     }
     api_id = config_td_settings.at("api_id").get<std::string>();
 
-    if (!config_td_settings.contains("api_hash")) {
+    [[unlikely]] if (!config_td_settings.contains("api_hash")) {
         logger->log(spdlog::level::critical,
                     "{}: The LIT configuration is corrupted (the 'td_settings'::'api_hash' field is missing)",
                     __PRETTY_FUNCTION__);
@@ -71,11 +72,24 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
     }
     api_hash = config_td_settings.at("api_hash").get<std::string>();
 
-    if (!config.contains("modules")) {
+    [[unlikely]] if (!config.contains("modules")) {
         logger->log(spdlog::level::critical,
                     "{}: The LIT configuration is corrupted (the 'modules' field is missing)",
                     __PRETTY_FUNCTION__);
         std::abort();
+    }
+
+    // =========== Apperance ============
+    [[unlikely]] if (config.contains("apperance")) {
+        auto app = config.at("apperance");
+
+        [[unlikely]] if (app.contains("command_prefix")) {
+            logger->log(spdlog::level::info,
+                        "{}: Redefining the command prefix: '{}' ==> '{}'",
+                        __PRETTY_FUNCTION__, runtime_storage::vars::command_prefix,
+                        app.at("command_prefix").get<std::string>());
+            runtime_storage::vars::command_prefix = app.at("command_prefix").get<std::string>();
+        }
     }
 
     return LITCfg(dir, version, api_id, api_hash);
