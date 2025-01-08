@@ -2,9 +2,11 @@
 
 #include <filesystem>
 #include <fstream>
+#include <vector>
 
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
+#include <td/telegram/td_api.h>
 
 #include <RuntimeStorage/RuntimeStorage.hxx>
 #include <Utils/Macros.hxx>
@@ -31,6 +33,7 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
     file_stream.close();
 
     std::string version, dir, api_id, api_hash;
+    std::vector<td::td_api::int53> blocked_requests;
 
     if (!config.contains("dir")) {
         logger->log(spdlog::level::critical,
@@ -38,6 +41,8 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
                     __PRETTY_FUNCTION__);
         std::abort();
     }
+
+    // ========== Main ===========
     dir = config.at("dir").get<std::string>();
 
     [[unlikely]] if (!config.contains("version")) {
@@ -54,6 +59,8 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
                     __PRETTY_FUNCTION__);
         std::abort();
     }
+
+    // ========== Main::td_settings ==========
     auto config_td_settings = config.at("td_settings");
 
     [[unlikely]] if (!config_td_settings.contains("api_id")) {
@@ -71,6 +78,15 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
         std::abort();
     }
     api_hash = config_td_settings.at("api_hash").get<std::string>();
+
+    [[unlikely]] if (config_td_settings.contains("blocked_requests")) {
+        for (auto& blocked_request : config_td_settings.at("blocked_requests")){
+            logger->log(spdlog::level::info,
+                        "{}: A new blocked request has been added: {}",
+                        __PRETTY_FUNCTION__, blocked_request.get<td::td_api::int53>());
+            blocked_requests.push_back(blocked_request.get<td::td_api::int53>());
+        }
+    }
 
     [[unlikely]] if (!config.contains("modules")) {
         logger->log(spdlog::level::critical,
@@ -92,5 +108,5 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
         }
     }
 
-    return LITCfg(dir, version, api_id, api_hash);
+    return LITCfg(dir, version, api_id, api_hash, blocked_requests);
 }

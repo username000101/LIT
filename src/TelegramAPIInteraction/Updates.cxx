@@ -1,6 +1,6 @@
 #include <TelegramAPIInteraction/Updates.hxx>
 
-#include <mutex>
+#include <algorithm>
 
 #include <td/telegram/Client.h>
 #include <Utils/Macros.hxx>
@@ -23,7 +23,12 @@ td::ClientManager::Response lit::td_api::get_response(td::td_api::object_ptr<td:
 
     if (req_id == 0)
         return {};
-
+    else if (std::find(LITConfig->blocked_requests().begin(), LITConfig->blocked_requests().end(), req->get_id()) != LITConfig->blocked_requests().end()) {
+        logger->log(spdlog::level::warn,
+                    "{}: Attempt to send an invalid request({})",
+                    __PRETTY_FUNCTION__, req->get_id());
+        return {};
+    }
     logger->log(spdlog::level::debug,
                 "{}: Getting response for request_id {} and td::td_api::Function::ID {}",
                 __PRETTY_FUNCTION__, req_id, req->get_id());
