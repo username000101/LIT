@@ -39,12 +39,12 @@ bool lit::td_auth::auth_in_account(std::shared_ptr<td::ClientManager> client, td
         if (!phone_number_result.object) {
             logger->log(spdlog::level::warn,
                         "{}: td_api::get_response() returned invalid response; trying again({} attempts left)",
-                        __FUNCTION__, 5 - attempt);
+                        __PRETTY_FUNCTION__, 5 - attempt);
             continue;
         } else if (attempt == 5) {
             logger->log(spdlog::level::critical,
                         "{}: Attempts ended, aborting",
-                        __FUNCTION__);
+                        __PRETTY_FUNCTION__);
             runtime_storage::LITClient.reset();
             std::exit(-1);
         } else {
@@ -52,7 +52,7 @@ bool lit::td_auth::auth_in_account(std::shared_ptr<td::ClientManager> client, td
                 auto error = td::move_tl_object_as<td::td_api::error>(phone_number_result.object);
                 logger->log(spdlog::level::warn,
                             "{}: td_api::get_response() returned error: '{}', trying again({} attempts left)",
-                            __FUNCTION__, error->message_, 5 - attempt);
+                            __PRETTY_FUNCTION__, error->message_, 5 - attempt);
             } else
                 break;
         }
@@ -77,12 +77,12 @@ bool lit::td_auth::auth_in_account(std::shared_ptr<td::ClientManager> client, td
         if (!code_result.object) {
             logger->log(spdlog::level::warn,
                         "{}: td_api::get_response() returned invalid response; trying again({} attempts left)",
-                        __FUNCTION__, 5 - attempt);
+                        __PRETTY_FUNCTION__, 5 - attempt);
             continue;
         } else if (attempt == 5) {
             logger->log(spdlog::level::critical,
                         "{}: Attempts ended, aborting",
-                        __FUNCTION__);
+                        __PRETTY_FUNCTION__);
             runtime_storage::LITClient.reset();
             std::exit(-1);
         } else {
@@ -90,7 +90,7 @@ bool lit::td_auth::auth_in_account(std::shared_ptr<td::ClientManager> client, td
                 auto error = td::move_tl_object_as<td::td_api::error>(code_result.object);
                 logger->log(spdlog::level::warn,
                             "{}: td_api::get_response() returned error: '{}', trying again({} attempts left)",
-                            __FUNCTION__, error->message_, 5 - attempt);
+                            __PRETTY_FUNCTION__, error->message_, 5 - attempt);
             } else
                 break;
         }
@@ -101,12 +101,12 @@ bool lit::td_auth::auth_in_account(std::shared_ptr<td::ClientManager> client, td
         if (!current_authorization_state.object) {
             logger->log(spdlog::level::warn,
                         "{}: td_api::get_response() returned invalid response; trying again({} attempts left)",
-                        __FUNCTION__, 5 - attempt);
+                        __PRETTY_FUNCTION__, 5 - attempt);
             continue;
         } else if (attempt == 5) {
             logger->log(spdlog::level::critical,
                         "{}: Attempts ended, aborting",
-                        __FUNCTION__);
+                        __PRETTY_FUNCTION__);
             runtime_storage::LITClient.reset();
             std::exit(-1);
         } else {

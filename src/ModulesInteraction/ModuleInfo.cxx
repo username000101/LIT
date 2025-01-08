@@ -28,36 +28,36 @@ std::optional<lit::modules_interaction::ModuleInfo> lit::modules_interaction::Mo
 
     auto config = nlohmann::json::parse(json);
     if (!config.contains("moduleName")) {
-        logger->log(spdlog::level::err, "{}: The module config is invalid: the 'moduleName' field is missing", __FUNCTION__);
+        logger->log(spdlog::level::err, "{}: The module config is invalid: the 'moduleName' field is missing", __PRETTY_FUNCTION__);
         return std::nullopt;
     }
     name = config.at("moduleName").get<std::string>();
 
     if (!config.contains("moduleVersion")) {
-        logger->log(spdlog::level::warn, "{}: The module config is incomplete: the 'moduleVersion' field is missing", __FUNCTION__);
+        logger->log(spdlog::level::warn, "{}: The module config is incomplete: the 'moduleVersion' field is missing", __PRETTY_FUNCTION__);
         version = "Undefined";
     } else
         version = config.at("moduleVersion").get<std::string>();
 
     if (!config.contains("moduleAuthor")) {
-        logger->log(spdlog::level::warn, "{}: The module config is incomplete: the 'moduleAuthor' field is missing", __FUNCTION__);
+        logger->log(spdlog::level::warn, "{}: The module config is incomplete: the 'moduleAuthor' field is missing", __PRETTY_FUNCTION__);
         author = "Undefined";
     } else
         author = config.at("moduleAuthor").get<std::string>();
 
     if (!config.contains("moduleDescription")) {
-        logger->log(spdlog::level::warn, "{}: The module config is incomplete: the 'moduleDescription' field is missing", __FUNCTION__);
+        logger->log(spdlog::level::warn, "{}: The module config is incomplete: the 'moduleDescription' field is missing", __PRETTY_FUNCTION__);
         description = "Undefined";
     } else
         description = config.at("moduleDescription").get<std::string>();
 
     if (!config.contains("moduleAliases")) {
-        logger->log(spdlog::level::err, "{}: The module config is invalid: the 'moduleAliases' field is missing", __FUNCTION__);
+        logger->log(spdlog::level::err, "{}: The module config is invalid: the 'moduleAliases' field is missing", __PRETTY_FUNCTION__);
         return std::nullopt;
     }
     for (auto& alias : config.at("moduleAliases").items()) {
         if (!alias.value().is_string()) {
-            logger->log(spdlog::level::warn, "{}: The module config is invalid: the 'moduleAliases' field contains invalid value(try to skip...)", __FUNCTION__);
+            logger->log(spdlog::level::warn, "{}: The module config is invalid: the 'moduleAliases' field contains invalid value(try to skip...)", __PRETTY_FUNCTION__);
         } else {
             aliases[alias.key()] = alias.value().get<std::string>();
         }

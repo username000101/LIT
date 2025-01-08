@@ -15,7 +15,7 @@ bool lit::td_auth::set_tdlibparameters(std::shared_ptr<td::ClientManager> client
     if (!client) {
         logger->log(spdlog::level::err,
                     "{}: Failed to set tdlib parameters: invalid client ptr provided",
-                    __FUNCTION__);
+                    __PRETTY_FUNCTION__);
         return false;
     }
 
@@ -28,12 +28,12 @@ bool lit::td_auth::set_tdlibparameters(std::shared_ptr<td::ClientManager> client
         auto error = td::move_tl_object_as<td::td_api::error>(response.object);
         logger->log(spdlog::level::err,
                     "{}: Failed to set tdlib parameters: TelegramAPI returned error: {}",
-                    __FUNCTION__, error->message_);
+                    __PRETTY_FUNCTION__, error->message_);
         return false;
     } else {
         logger->log(spdlog::level::info,
                     "{}: Ok",
-                    __FUNCTION__);
+                    __PRETTY_FUNCTION__);
         return true;
     }
 }

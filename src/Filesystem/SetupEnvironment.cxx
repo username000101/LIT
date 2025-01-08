@@ -10,7 +10,7 @@ void lit::env::setup::setup_environment(const std::filesystem::path& PREFIX) {
     if (!std::filesystem::exists(PREFIX.string())) {
         spdlog::log(spdlog::level::info,
                     "{}: The LIT files directory could not be found (perhaps it is being launched for the first time?). It will be created automatically",
-                    __FUNCTION__);
+                    __PRETTY_FUNCTION__);
 
         std::filesystem::create_directories(PREFIX.string());
         std::filesystem::create_directory(PREFIX.string() + "/files");
@@ -29,7 +29,7 @@ void lit::env::setup::setup_environment(const std::filesystem::path& PREFIX) {
         else
             spdlog::log(spdlog::level::info,
                         "{}: There is no need to create directories, everything is fine",
-                        __FUNCTION__);
+                        __PRETTY_FUNCTION__);
     }
 
     if (!std::filesystem::exists(PREFIX.string() + "/modules.json")) {
@@ -37,7 +37,7 @@ void lit::env::setup::setup_environment(const std::filesystem::path& PREFIX) {
         if (!modules_config_file.is_open()) {
             spdlog::log(spdlog::level::critical,
                         "{}: Failed to create '{}/modules.json': stream open error",
-                        __FUNCTION__, PREFIX.string());
+                        __PRETTY_FUNCTION__, PREFIX.string());
             std::abort();
         }
         modules_config_file << R"({
@@ -53,7 +53,7 @@ void lit::env::setup::setup_environment(const std::filesystem::path& PREFIX) {
         if (!config_file.is_open()) {
             spdlog::log(spdlog::level::critical,
                         "{}: Failed to create '{}/config.json': stream open error",
-                        __FUNCTION__, PREFIX.string());
+                        __PRETTY_FUNCTION__, PREFIX.string());
         }
         auto prefix_str = PREFIX.string();
         config_file << fmt::format(R"({{

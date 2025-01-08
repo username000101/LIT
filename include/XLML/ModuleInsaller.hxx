@@ -39,25 +39,26 @@ namespace lit {
         class ModuleInstaller {
         public:
             enum ModuleType { ARCHIVE, LIB, INVALID, };
-            ModuleInstaller(const std::filesystem::path& module) {
-                if (!std::filesystem::exists(module)) {
+            ModuleInstaller(ModuleType module_type) : module_type_(module_type) {}
+
+            bool operator()(const std::filesystem::path& module_path) {
+                if (!std::filesystem::exists(module_path)) {
                     spdlog::log(spdlog::level::err,
-                        "{}: Failed to create ModuleInstaller object: the module '{}' doesn't exists",
-                        __FUNCTION__, module.string());
-                    this->module_type_ = INVALID;
+                                "{}: Failed to install module {}: file not found",
+                                __PRETTY_FUNCTION__, module_path.string());
+                    return false;
                 } else {
-                    if (module.extension() == ".so")
-                        this->module_type_ = LIB;
+                    if (module_path.extension().string() == ".so")
+                        return this->start_install_library(module_path);
                     else
-                        this->module_type_ = ARCHIVE;
+                        return this->start_install_archive(module_path);
                 }
             }
         private:
-            std::filesystem::path module_path_;
             ModuleType module_type_;
 
-            void start_install_archive(); // For .zip/.7z/.tar.gz/.tar.xz/etc modules
-            void start_install_library(); // For .so libraries
+            bool start_install_archive(const std::filesystem::path& module); // For .zip/.7z/.tar.gz/.tar.xz/etc modules
+            bool start_install_library(const std::filesystem::path& module); // For .so libraries
         };
     }
 }

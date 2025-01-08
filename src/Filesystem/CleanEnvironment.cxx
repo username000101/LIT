@@ -15,5 +15,5 @@ void lit::env::setup::clean_environment(const std::filesystem::path& PREFIX) {
     }
     spdlog::log(spdlog::level::info,
         "{}: The environment was cleaned succefully",
-        __FUNCTION__);
+        __PRETTY_FUNCTION__);
 }

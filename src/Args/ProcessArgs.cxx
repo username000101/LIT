@@ -5,7 +5,7 @@
 void lit::args::process_args(int argc, char** argv, std::unordered_map<std::string,
     void(*)(std::optional<std::vector<std::string>>)> args) {
     if (args.empty()) {
-        spdlog::log(spdlog::level::warn, "{}: No arguments are set (all arguments will be skipped)", __FUNCTION__);
+        spdlog::log(spdlog::level::warn, "{}: No arguments are set (all arguments will be skipped)", __PRETTY_FUNCTION__);
         return;
     }
 

@@ -13,20 +13,20 @@ namespace utils {
     (void* handle, const std::string& function_name, FunctionArguments&&... function_args) {
         if (!handle) {
             spdlog::log(spdlog::level::err,
-                "{}: Failed to get function: cannot open lib: {}", __FUNCTION__, dlerror());
+                "{}: Failed to get function: cannot open lib: {}", __PRETTY_FUNCTION__, dlerror());
             return nullptr;
         }
 
         FunctionSignature function = (FunctionSignature)dlsym(handle, function_name.c_str());
         if (!function) {
             spdlog::log(spdlog::level::err,
-                "{}: Failed to get function: cannot sym function: {}", __FUNCTION__, dlerror());
+                "{}: Failed to get function: cannot sym function: {}", __PRETTY_FUNCTION__, dlerror());
             return nullptr;
         }
 
         if (!std::is_invocable_v<FunctionSignature, FunctionArguments...>) {
             spdlog::log(spdlog::level::err,
-                "{}: Failed to get function: function signature is invalid", __FUNCTION__);
+                "{}: Failed to get function: function signature is invalid", __PRETTY_FUNCTION__);
             return nullptr;
         }
         return function;
@@ -36,7 +36,7 @@ namespace utils {
     (void* handle, const std::string& function_name) {
         if (!handle) {
             spdlog::log(spdlog::level::err,
-                "{}: Failed to get function: cannot open lib: {}", __FUNCTION__,dlerror());
+                "{}: Failed to get function: cannot open lib: {}", __PRETTY_FUNCTION__,dlerror());
             return nullptr;
         }
 
@@ -44,7 +44,7 @@ namespace utils {
         (handle, function_name.c_str());
         if (!function) {
             spdlog::log(spdlog::level::err,
-                "{}: Failed to get function: cannot sym function: {}", __FUNCTION__, dlerror());
+                "{}: Failed to get function: cannot sym function: {}", __PRETTY_FUNCTION__, dlerror());
             return nullptr;
         }
 

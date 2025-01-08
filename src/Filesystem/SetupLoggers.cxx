@@ -10,7 +10,7 @@
 
 void lit::env::setup::setup_loggers(std::vector<std::pair<std::string, spdlog::level::level_enum>> loggers, const std::filesystem::path& PREFIX) {
     if (!std::filesystem::exists(PREFIX)) {
-        spdlog::log(spdlog::level::critical, "{}: Setup loggers error: invalid PREFIX provided(prefix=\"{}\")", __FUNCTION__, PREFIX.string());
+        spdlog::log(spdlog::level::critical, "{}: Setup loggers error: invalid PREFIX provided(prefix=\"{}\")", __PRETTY_FUNCTION__, PREFIX.string());
         std::abort();
     }
 
@@ -32,5 +32,5 @@ void lit::env::setup::setup_loggers(std::vector<std::pair<std::string, spdlog::l
         ("DefaultLogger", spdlog::sinks_init_list{ LIT_SPDLOG_MAKE_STDOUT_SINK(),
          LIT_SPDLOG_MAKE_FILE_SINK(log_file_name)}));
 
-    spdlog::log(spdlog::level::info, "{}: All loggers are initialized", __FUNCTION__);
+    spdlog::log(spdlog::level::info, "{}: All loggers are initialized", __PRETTY_FUNCTION__);
 }

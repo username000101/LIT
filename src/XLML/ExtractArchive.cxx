@@ -15,7 +15,7 @@ std::filesystem::path lit::xlml::extract_archive(const std::filesystem::path& pa
     if (path.empty()) {
         logger->log(spdlog::level::err,
             "{}: Failed to extract archive: the path is empty",
-            __FUNCTION__);
+            __PRETTY_FUNCTION__);
         return "";
     }
 
@@ -30,7 +30,7 @@ std::filesystem::path lit::xlml::extract_archive(const std::filesystem::path& pa
     if (archive_read_open_filename(archive, path.c_str(), 10240) != ARCHIVE_OK) {
         logger->log(spdlog::level::err,
             "{}: Failed to extract archive: libarchive returned error: {}",
-            __FUNCTION__, archive_error_string(archive));
+            __PRETTY_FUNCTION__, archive_error_string(archive));
         archive_read_free(archive);
         return "";
     }
@@ -41,13 +41,13 @@ std::filesystem::path lit::xlml::extract_archive(const std::filesystem::path& pa
         auto target_file = target_dir + "/" + archive_file_path;
         logger->log(spdlog::level::trace,
             "{}: Extracting '{}' to '{}' from '{}'",
-            __FUNCTION__, archive_file_path, target_file, path.string());
+            __PRETTY_FUNCTION__, archive_file_path, target_file, path.string());
 
         std::ofstream write(target_file, std::ios::binary);
         if (!write.is_open()) {
             logger->log(spdlog::level::warn,
                 "{}: Failed to extract '{}': failed to open stream",
-                __FUNCTION__, archive_file_path);
+                __PRETTY_FUNCTION__, archive_file_path);
             archive_read_data_skip(archive);
             continue;
         }
