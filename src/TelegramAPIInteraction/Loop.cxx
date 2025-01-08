@@ -94,7 +94,7 @@ void lit::td_api::lit_loop() {
                     }
                     else {
                         auto message_content = td::move_tl_object_as<td::td_api::messageText>(message->message_->content_);
-                        if (!message_content->text_->text_.starts_with(".")) {
+                        if (!message_content->text_->text_.starts_with(runtime_storage::vars::command_prefix)) {
                             logger->log(spdlog::level::debug,
                                         "{}: Non-command message",
                                         __PRETTY_FUNCTION__);
@@ -105,7 +105,7 @@ void lit::td_api::lit_loop() {
                                     __PRETTY_FUNCTION__, message_content->text_->text_);
                         auto message_ptr = utils::td_object_cast(std::move(message->message_));
                         std::thread async_module_start([message_content = std::move(message_content), message_ptr]() {
-                            xlml::start_module(message_content->text_->text_, message_ptr);
+                            xlml::start_module(message_content->text_->text_.substr(runtime_storage::vars::command_prefix.length()), message_ptr);
                         });
                         async_module_start.detach();
                     }
