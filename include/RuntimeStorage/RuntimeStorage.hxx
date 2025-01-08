@@ -28,20 +28,8 @@ namespace lit {
         inline std::shared_ptr<std::queue<td::td_api::object_ptr<td::td_api::Function>>> LITTdQueriesQueue;
         inline LIT_EXPORT std::uint64_t LITRequestId = 1;
 
-        inline static std::mutex queue_mtx;
-
-        inline void add_in_query(td::td_api::object_ptr<td::td_api::Function> query) {
-            queue_mtx.lock();
-            LITTdQueriesQueue->push(std::move(query));
-            queue_mtx.unlock();
-        }
-
-        inline td::td_api::object_ptr<td::td_api::Function> get_from_query() {
-            queue_mtx.lock();
-            auto buffer = std::move(LITTdQueriesQueue->front());
-            LITTdQueriesQueue->pop();
-            queue_mtx.unlock();
-            return std::move(buffer);
+        namespace vars {
+            inline std::string command_prefix = ".";
         }
     }
 }
