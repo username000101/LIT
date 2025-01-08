@@ -2,6 +2,8 @@
 #define LIT_MODULESINTERACTION_TDWRAP_HXX
 
 #include <cstdint>
+#include <memory>
+#include <iostream>
 
 #include <td/telegram/Client.h>
 
@@ -24,15 +26,24 @@ namespace lit {
             TdWrap(TdWrap& other) = delete;
             TdWrap(TdWrap&& other) = delete;
             TdWrap(update_handler update_function, const std::string& call_command,
-                   td::td_api::object_ptr<td::td_api::message> message) :
+                   std::shared_ptr<td::td_api::message> message) :
                 update_function_(update_function), call_command_(call_command),
-                message_(std::move(message)) {}
+                message_(message) {
+                if (!message) {
+                    std::cout << "FROM MODULE::TdWrap: THE message IS INVALID" << std::endl;
+                    std::exit(-1);
+                }
+            }
 
             [[nodiscard]] td::ClientManager::Response send_request
-                   (td::td_api::object_ptr<td::td_api::Function> request) const noexcept
-                   { return this->update_function_(std::move(request), runtime_storage::LITRequestId++); }
+                   (td::td_api::object_ptr<td::td_api::Function> request) const noexcept {
+                        if (!this->update_function_) {
+                            std::cout << "FROM MODULE::TdWrap: THE update_function_ IS NOT CALLABLE" << std::endl;
+                        }
+                        return this->update_function_(std::move(request), runtime_storage::LITRequestId++);
+                   }
 
-            [[nodiscard]] const td::td_api::object_ptr<td::td_api::message>& get_message() const noexcept
+            [[nodiscard]] std::shared_ptr<td::td_api::message> get_message() const noexcept
                    { return this->message_; }
 
             [[nodiscard]] std::string get_call_command() const noexcept
@@ -40,7 +51,7 @@ namespace lit {
         private:
             update_handler update_function_;
             std::string call_command_;
-            td::td_api::object_ptr<td::td_api::message> message_;
+            std::shared_ptr<td::td_api::message> message_;
         };
     }
 }
