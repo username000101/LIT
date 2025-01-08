@@ -79,9 +79,9 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
         std::abort();
     }
 
-    // =========== Apperance ============
-    [[unlikely]] if (config.contains("apperance")) {
-        auto app = config.at("apperance");
+    // =========== Appearance ============
+    [[unlikely]] if (config.contains("appearance")) {
+        auto app = config.at("appearance");
 
         [[unlikely]] if (app.contains("command_prefix")) {
             logger->log(spdlog::level::info,
