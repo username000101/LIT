@@ -15,14 +15,14 @@ namespace utils {
         if (setgid(new_gid) != 0) {
             logger->log(spdlog::level::err,
                         "{}: Failed to drop privileges",
-                        __FUNCTION__);
+                        __PRETTY_FUNCTION__);
             return false;
         }
 
         if (setuid(new_uid) != 0) {
             logger->log(spdlog::level::err,
                         "{}: Failed to drop privileges",
-                        __FUNCTION__);
+                        __PRETTY_FUNCTION__);
             return false;
         }
 
