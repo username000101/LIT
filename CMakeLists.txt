@@ -1,8 +1,6 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.30)
 
 set(LIT_VERSION "0.1.0")
-set(LIT_VERSION_TYPE "Alpha")
-
 project(
         LIT
         VERSION ${LIT_VERSION}
@@ -14,7 +12,6 @@ set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++ -Wl,--export-dynamic -Wno-unused-command-line-argument")
 set(CMAKE_C_COMPILER "/usr/bin/clang")
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
-
 
 find_package(spdlog REQUIRED)
 find_package(nlohmann_json REQUIRED)
@@ -97,7 +94,7 @@ target_compile_definitions(LIT PRIVATE
     LIT_LOGS_DIR="${LIT_INSTALL_PREFIX}/logs"
     LIT_TDLIB_DATABASE_DIR="${LIT_INSTALL_PREFIX}/tdlib/db"
     LIT_TDLIB_FILES_DIR="${LIT_INSTALL_PREFIX}/tdlib/files"
-    LIT_TDLIB_TIMEOUT=15.0
+    LIT_TDLIB_TIMEOUT=5.0
     LIT_TDLIB_ATTEMPTS=150
 )
 
