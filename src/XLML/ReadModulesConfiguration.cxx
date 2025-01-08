@@ -53,7 +53,7 @@ std::unordered_map<std::string, lit::modules_interaction::ModuleInfo> lit::xlml:
         }
         path = module.at("path").get<std::string>();
         if (!std::filesystem::exists(path)) {
-            logger->log(spdlog::level::debug,
+            logger->log(spdlog::level::warn,
                         "{}: Invalid path for module",
                         __PRETTY_FUNCTION__);
             continue;
@@ -85,7 +85,7 @@ std::unordered_map<std::string, lit::modules_interaction::ModuleInfo> lit::xlml:
 
         if (!module.contains("description")) {
             logger->log(spdlog::level::warn,
-                        "{}: The module is incomplete(the 'description' field is missing), default version is ''",
+                        "{}: The module is incomplete(the 'description' field is missing), default description is ''",
                         __PRETTY_FUNCTION__);
             description = "";
         } else
