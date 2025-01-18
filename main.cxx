@@ -19,8 +19,8 @@ int main(int argc, char** argv) {
     lit::env::setup::setup_environment();
     lit::env::setup::setup_loggers(
         {
-            {"ModuleLoader", spdlog::level::info},
-            {"ConfigurationManager", spdlog::level::info},
+            {"ModuleLoader", spdlog::level::debug},
+            {"ConfigurationManager", spdlog::level::debug},
             {"LIT", spdlog::level::info},
             {"XLML", spdlog::level::info},
             {"MutWrap", spdlog::level::info},
