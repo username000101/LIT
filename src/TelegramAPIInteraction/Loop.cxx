@@ -1,7 +1,7 @@
 #include <TelegramAPIInteraction/Loop.hxx>
 
-#include <functional>
 #include <string>
+#include <sstream>
 
 #include <td/telegram/Client.h>
 #include <spdlog/spdlog.h>
@@ -104,8 +104,16 @@ void lit::td_api::lit_loop() {
                                     "{}: The outgoing message may be a command\ntext='{}'",
                                     __PRETTY_FUNCTION__, message_content->text_->text_);
                         auto message_ptr = utils::td_object_cast(std::move(message->message_));
-                        std::thread async_module_start([message_content = std::move(message_content), message_ptr]() {
-                            xlml::start_module(message_content->text_->text_.substr(runtime_storage::vars::command_prefix.length()), message_ptr);
+                        auto message_text = message_content->text_->text_.substr(runtime_storage::vars::command_prefix.length());
+                        std::istringstream rstream(message_text);
+                        std::string command;
+                        rstream >> command;
+                        std::string buffer;
+                        std::vector<std::string> args;
+                        while (rstream >> buffer)
+                            args.push_back(buffer);
+                        std::thread async_module_start([message_ptr, args = std::move(args), message_text = std::move(command)] {
+                            xlml::start_module(message_text, args, message_ptr);
                         });
                         async_module_start.detach();
                     }
