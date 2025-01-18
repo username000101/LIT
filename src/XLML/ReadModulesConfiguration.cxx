@@ -40,18 +40,18 @@ std::unordered_map<std::string, lit::modules_interaction::ModuleInfo> lit::xlml:
         return {};
     }
 
-    for (auto& module : json.at("modules")) {
+    for (auto& module : json.at("modules").items()) {
         std::filesystem::path path;
         std::string name, version, author, description;
         std::unordered_map<std::string, std::string> aliases;
 
-        if (!module.contains("path")) {
+        if (!module.value().contains("path")) {
             logger->log(spdlog::level::warn,
                         "{}: The module is invalid(the 'path' field is missing), it will be skipped",
                         __PRETTY_FUNCTION__);
             continue;
         }
-        path = module.at("path").get<std::string>();
+        path = module.value().at("path").get<std::string>();
         if (!std::filesystem::exists(path)) {
             logger->log(spdlog::level::warn,
                         "{}: Invalid path for module",
@@ -59,45 +59,45 @@ std::unordered_map<std::string, lit::modules_interaction::ModuleInfo> lit::xlml:
             continue;
         }
 
-        if (!module.contains("name")) {
+        if (!module.value().contains("name")) {
             logger->log(spdlog::level::warn,
                         "{}: The module is invalid(the 'name' field is missing), it will be skipped",
                         __PRETTY_FUNCTION__);
             continue;
         }
-        name = module.at("name").get<std::string>();
+        name = module.value().at("name").get<std::string>();
 
-        if (!module.contains("version")) {
+        if (!module.value().contains("version")) {
             logger->log(spdlog::level::warn,
                         "{}: The module is incomplete(the 'version' field is missing), default version is 'unknown'",
                         __PRETTY_FUNCTION__);
             version = "unknown";
         } else
-            version = module.at("version").get<std::string>();
+            version = module.value().at("version").get<std::string>();
 
-        if (!module.contains("author")) {
+        if (!module.value().contains("author")) {
             logger->log(spdlog::level::warn,
                         "{}: The module is incomplete(the 'author' field is missing), default author is 'unknown'",
                         __PRETTY_FUNCTION__);
             author = "unknown";
         } else
-            author = module.at("author").get<std::string>();
+            author = module.value().at("author").get<std::string>();
 
-        if (!module.contains("description")) {
+        if (!module.value().contains("description")) {
             logger->log(spdlog::level::warn,
                         "{}: The module is incomplete(the 'description' field is missing), default description is ''",
                         __PRETTY_FUNCTION__);
             description = "";
         } else
-            description = module.at("description").get<std::string>();
+            description = module.value().at("description").get<std::string>();
 
-        if (!module.contains("aliases")) {
+        if (!module.value().contains("aliases")) {
             logger->log(spdlog::level::warn,
                         "{}: The module is invalid(the 'aliases' field is missing), it will be skipped",
                         __PRETTY_FUNCTION__);
             continue;
         }
-        for (auto& alias : module.at("aliases").items()) {
+        for (auto& alias : module.value().at("aliases").items()) {
             aliases[alias.key()] = alias.value().get<std::string>();
         }
         logger->log(spdlog::level::debug,

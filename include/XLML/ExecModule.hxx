@@ -3,13 +3,14 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <td/telegram/td_api.h>
 
 
 namespace lit {
     namespace xlml {
-        bool start_module(const std::string& message_text,
+        bool start_module(std::string message_text, std::vector<std::string> args,
                           std::shared_ptr<td::td_api::message>);
     }
 }
