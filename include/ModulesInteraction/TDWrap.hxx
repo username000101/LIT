@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <memory>
 #include <iostream>
+#include <vector>
 
 #include <td/telegram/Client.h>
 
@@ -25,14 +26,16 @@ namespace lit {
             TdWrap operator=(TdWrap& other) = delete;
             TdWrap(TdWrap& other) = delete;
             TdWrap(TdWrap&& other) = delete;
-            TdWrap(update_handler update_function, const std::string& call_command,
-                   std::shared_ptr<td::td_api::message> message) :
+            TdWrap(update_handler update_function, std::string call_command,
+                   std::vector<std::string> args, std::shared_ptr<td::td_api::message> message) :
                 update_function_(update_function), call_command_(call_command),
                 message_(message) {
                 if (!message) {
                     std::cout << "FROM MODULE::TdWrap: THE message IS INVALID" << std::endl;
                     std::exit(-1);
                 }
+
+                this->args_ = args;
             }
 
             [[nodiscard]] td::ClientManager::Response send_request
@@ -43,13 +46,22 @@ namespace lit {
                         return this->update_function_(std::move(request), runtime_storage::LITRequestId++);
                    }
 
-            [[nodiscard]] std::shared_ptr<td::td_api::message> get_message() const noexcept
-                   { return this->message_; }
+            [[nodiscard]] std::shared_ptr<td::td_api::message> get_message() const noexcept {
+                if (this->message_)
+                    return this->message_;
+                else {
+                    std::cout << __PRETTY_FUNCTION__ << ": !! ATTEMPT TO ACCESS TO INVALID MESSAGE(POINTER IS NULL) !!" << std::endl;
+                    return nullptr;
+                }
+            }
 
             [[nodiscard]] std::string get_call_command() const noexcept
                    { return this->call_command_; }
+
+            [[nodiscard]] std::vector<std::string> get_args() { return this->args_; }
         private:
             update_handler update_function_;
+            std::vector<std::string> args_;
             std::string call_command_;
             std::shared_ptr<td::td_api::message> message_;
         };
