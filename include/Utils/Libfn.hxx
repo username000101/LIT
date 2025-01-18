@@ -11,7 +11,7 @@ namespace utils {
 
     template <typename FunctionSignature, typename... FunctionArguments> FunctionSignature get_function
     (void* handle, const std::string& function_name, FunctionArguments&&... function_args) {
-        if (!handle) {
+        [[unlikely]] if (!handle) {
             spdlog::log(spdlog::level::err,
                 "{}: Failed to get function: cannot open lib: {}", __PRETTY_FUNCTION__, dlerror());
             return nullptr;
@@ -34,7 +34,7 @@ namespace utils {
 
     template <typename FunctionSignature> FunctionSignature get_function
     (void* handle, const std::string& function_name) {
-        if (!handle) {
+        [[unlikely]] if (!handle) {
             spdlog::log(spdlog::level::err,
                 "{}: Failed to get function: cannot open lib: {}", __PRETTY_FUNCTION__,dlerror());
             return nullptr;

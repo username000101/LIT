@@ -24,7 +24,7 @@ namespace utils {
         };
 
         inline std::string console_input(const std::string& promt) {
-            if (!promt.empty())
+            [[unlikely]] if (!promt.empty())
                 std::cout << promt;
             std::string buffer;
             std::getline(std::cin, buffer);

@@ -12,14 +12,14 @@ namespace utils {
         static auto logger = spdlog::get("LIT");
         ASSERT(logger, "The 'LIT' logger is not initialized");
 
-        if (setgid(new_gid) != 0) {
+        [[unlikely]] if (setgid(new_gid) != 0) {
             logger->log(spdlog::level::err,
                         "{}: Failed to drop privileges",
                         __PRETTY_FUNCTION__);
             return false;
         }
 
-        if (setuid(new_uid) != 0) {
+        [[unlikely]] if (setuid(new_uid) != 0) {
             logger->log(spdlog::level::err,
                         "{}: Failed to drop privileges",
                         __PRETTY_FUNCTION__);
