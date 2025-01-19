@@ -7,6 +7,9 @@
 #include <vector>
 
 #include <spdlog/spdlog.h>
+#include <nlohmann/json.hpp>
+
+#include <Utils/Macros.hxx>
 
 namespace lit {
     namespace xlml {
@@ -36,10 +39,10 @@ namespace lit {
             std::shared_ptr<ModuleBuildConfig> module_build_configuration_;
         };
 
-        class ModuleInstaller {
+        class LIT_EXPORT ModuleInstaller {
         public:
             enum ModuleType { ARCHIVE, LIB, INVALID, };
-            ModuleInstaller(ModuleType module_type) : module_type_(module_type) {}
+            ModuleInstaller() {}
 
             bool operator()(const std::filesystem::path& module_path) {
                 if (!std::filesystem::exists(module_path)) {
@@ -55,10 +58,13 @@ namespace lit {
                 }
             }
         private:
-            ModuleType module_type_;
+            nlohmann::json read_and_merge_module_config(const std::string& config, const std::string& modules_config,
+                                                        const std::filesystem::path& module_path);
 
             bool start_install_archive(const std::filesystem::path& module); // For .zip/.7z/.tar.gz/.tar.xz/etc modules
             bool start_install_library(const std::filesystem::path& module); // For .so libraries
+            bool start_install_library_exconf(const std::filesystem::path& module,
+                                              const std::filesystem::path& config); // For .so libraries with an external config
         };
     }
 }

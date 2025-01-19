@@ -4,9 +4,11 @@
 #include <filesystem>
 #include <string>
 
+#include <Utils/Macros.hxx>
+
 namespace lit {
     namespace xlml {
-        std::filesystem::path extract_archive(const std::filesystem::path& path);
+        std::filesystem::path LIT_EXPORT extract_archive(const std::filesystem::path& path);
     }
 }
 
