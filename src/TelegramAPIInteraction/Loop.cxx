@@ -71,7 +71,7 @@ void lit::td_api::lit_loop() {
     }
 
     logger->log(spdlog::level::info,
-                "{}: It looks like the LIT is ready to work, but this part is not implemented now, be careful",
+                "{}: It looks like the LIT is ready to work, but this part is not fully implemented, be careful",
                 __PRETTY_FUNCTION__);
 
     logger->log(spdlog::level::info,
@@ -100,7 +100,7 @@ void lit::td_api::lit_loop() {
                                         __PRETTY_FUNCTION__);
                             continue;
                         }
-                        logger->log(spdlog::level::info,
+                        logger->log(spdlog::level::debug,
                                     "{}: The outgoing message may be a command\ntext='{}'",
                                     __PRETTY_FUNCTION__, message_content->text_->text_);
                         auto message_ptr = utils::td_object_cast(std::move(message->message_));
