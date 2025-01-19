@@ -1,4 +1,4 @@
-#include <XLML/ModuleInsaller.hxx>
+#include <XLML/ModuleInstaller.hxx>
 
 #include <filesystem>
 
