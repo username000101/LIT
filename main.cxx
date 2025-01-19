@@ -8,6 +8,7 @@
 #include <Filesystem/EnvironmentSetup.hxx>
 #include <RuntimeStorage/RuntimeStorage.hxx>
 #include <Utils/Saver.hxx>
+#include <XLML/ModuleInstaller.hxx>
 #include <TelegramAPIInteraction/Loop.hxx>
 #include <XLML/ModulesConfigurationReader.hxx>
 #include <Utils/TerminalIO.hxx>
