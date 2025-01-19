@@ -43,5 +43,5 @@
 
 ## Useful information
 
-- [Setting up and configuring LIT](https://github.com/username000101/LIT/readme's/CONFIGURING.md)
-- [Help and support](https://github.com/username000101/LIT/readme's/HELP.md)
+- [Setting up and configuring LIT](https://github.com/username000101/LIT/tree/main/readme's/CONFIGURING.md)
+- [Help and support](https://github.com/username000101/LIT/tree/main/readme's/HELP.md)
