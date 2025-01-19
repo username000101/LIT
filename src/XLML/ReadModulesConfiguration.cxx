@@ -54,8 +54,8 @@ std::unordered_map<std::string, lit::modules_interaction::ModuleInfo> lit::xlml:
         path = module.value().at("path").get<std::string>();
         if (!std::filesystem::exists(path)) {
             logger->log(spdlog::level::warn,
-                        "{}: Invalid path for module",
-                        __PRETTY_FUNCTION__);
+                        "{}: Invalid path for module: {}",
+                        __PRETTY_FUNCTION__, path.string());
             continue;
         }
 
