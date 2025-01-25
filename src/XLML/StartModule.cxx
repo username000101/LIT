@@ -61,7 +61,8 @@ bool lit::xlml::start_module(std::string command, std::vector<std::string> args,
             utils::drop_privileges();
 
             try {
-                function(std::make_shared<modules_interaction::TdWrap>(td_api::get_response, std::move(command), args, message));
+                auto get_response_wrapper = [](td::td_api::object_ptr<td::td_api::Function> req) { return td_api::get_response(std::move(req), runtime_storage::LITRequestId++); };
+                function(std::make_shared<modules_interaction::TdWrap>(get_response_wrapper, std::move(command), args, message));
             } catch (std::exception& exc) {
                 logger->log(spdlog::level::warn,
                             "{}: The '{}' threw the std::exception(or its derivatives): {}",
