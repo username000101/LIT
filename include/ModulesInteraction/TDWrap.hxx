@@ -2,10 +2,13 @@
 #define LIT_MODULESINTERACTION_TDWRAP_HXX
 
 #include <memory>
-#include <iostream>
+#include <string>
+#include <tuple>
 #include <vector>
 
 #include <td/telegram/Client.h>
+
+extern "C" std::tuple<int, int, int> TDWRAP_LAYER_VERSION = {1, 0, 0};
 
 namespace lit {
     namespace modules_interaction {
@@ -25,33 +28,27 @@ namespace lit {
                    std::vector<std::string> args, std::shared_ptr<td::td_api::message> message) :
                 update_function_(update_function), call_command_(call_command),
                 message_(message) {
-                if (!message) {
-                    std::cout << "FROM MODULE::TdWrap: THE message IS INVALID" << std::endl;
+                if (!message)
                     std::exit(-1);
-                }
 
                 this->args_ = args;
             }
 
             [[nodiscard]] td::ClientManager::Response send_request
                    (td::td_api::object_ptr<td::td_api::Function> request) const noexcept {
-                        if (!this->update_function_) {
-                            std::cout << "FROM MODULE::TdWrap: THE update_function_ IS NOT CALLABLE" << std::endl;
-                        }
+                        if (!this->update_function_)
+                            return {};
                         return this->update_function_(std::move(request));
                    }
 
             [[nodiscard]] std::shared_ptr<td::td_api::message> get_message() const noexcept {
                 if (this->message_)
                     return this->message_;
-                else {
-                    std::cout << __PRETTY_FUNCTION__ << ": !! ATTEMPT TO ACCESS TO INVALID MESSAGE(POINTER IS NULL) !!" << std::endl;
+                else
                     return nullptr;
-                }
             }
 
-            [[nodiscard]] std::string get_call_command() const noexcept
-                   { return this->call_command_; }
+            [[nodiscard]] std::string get_call_command() const noexcept { return this->call_command_; }
 
             [[nodiscard]] std::vector<std::string> get_args() { return this->args_; }
         private:
