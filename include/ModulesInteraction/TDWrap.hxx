@@ -1,7 +1,6 @@
 #ifndef LIT_MODULESINTERACTION_TDWRAP_HXX
 #define LIT_MODULESINTERACTION_TDWRAP_HXX
 
-#include <cstdint>
 #include <memory>
 #include <iostream>
 #include <vector>
@@ -9,10 +8,6 @@
 #include <td/telegram/Client.h>
 
 namespace lit {
-    namespace runtime_storage {
-        extern std::uint64_t LITRequestId;
-    }
-
     namespace modules_interaction {
         /*
          * TdWrap is a method of abstracting the tdlib client from the module.
@@ -21,7 +16,7 @@ namespace lit {
         class __attribute__((visibility("default"))) TdWrap {
         public:
             using update_handler = td::ClientManager::Response(*)
-                (td::td_api::object_ptr<td::td_api::Function>, td::ClientManager::RequestId);
+                (td::td_api::object_ptr<td::td_api::Function>);
 
             TdWrap operator=(TdWrap& other) = delete;
             TdWrap(TdWrap& other) = delete;
@@ -43,7 +38,7 @@ namespace lit {
                         if (!this->update_function_) {
                             std::cout << "FROM MODULE::TdWrap: THE update_function_ IS NOT CALLABLE" << std::endl;
                         }
-                        return this->update_function_(std::move(request), runtime_storage::LITRequestId++);
+                        return this->update_function_(std::move(request));
                    }
 
             [[nodiscard]] std::shared_ptr<td::td_api::message> get_message() const noexcept {
