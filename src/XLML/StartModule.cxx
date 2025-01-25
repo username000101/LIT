@@ -50,6 +50,27 @@ bool lit::xlml::start_module(std::string command, std::vector<std::string> args,
         return false;
     }
 
+    auto module_tdwrap_layer_version = reinterpret_cast<std::tuple<int, int, int>*>(dlsym(handle, "TDWRAP_LAYER_VERSION"));
+    if (!module_tdwrap_layer_version) {
+        logger->log(spdlog::level::warn,
+                    "{}: The '{}' module does not contain a version of the TDWrap layer, the module may not be compatible.",
+                    __PRETTY_FUNCTION__, module_info.name());
+    } else
+        if (*module_tdwrap_layer_version != TDWRAP_LAYER_VERSION) {
+            logger->log(spdlog::level::err,
+                    "{}: The TDWrap layers are different(LIT='{}.{}.{}';{}='{}.{}.{}'), the '{}' module  cannot be loaded",
+                    __PRETTY_FUNCTION__,
+                    std::get<0>(TDWRAP_LAYER_VERSION),
+                    std::get<1>(TDWRAP_LAYER_VERSION),
+                    std::get<2>(TDWRAP_LAYER_VERSION),
+                    module_info.name(),
+                    std::get<0>(*module_tdwrap_layer_version),
+                    std::get<1>(*module_tdwrap_layer_version),
+                    std::get<2>(*module_tdwrap_layer_version),
+                    module_info.name());
+            return false;
+        }
+
     auto function = utils::get_function<int(*)(std::shared_ptr<modules_interaction::TdWrap>)>(handle, alias_function);
     if (!function) {
         logger->log(spdlog::level::err,
