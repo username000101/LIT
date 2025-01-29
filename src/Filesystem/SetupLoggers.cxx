@@ -14,7 +14,7 @@ void lit::env::setup::setup_loggers(std::vector<std::pair<std::string, spdlog::l
         std::abort();
     }
 
-    spdlog::flush_every(std::chrono::milliseconds(1500));
+    spdlog::flush_every(std::chrono::seconds(1));
     auto now_time_t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     std::ostringstream formattedTime;
     formattedTime << std::put_time(std::localtime(&now_time_t), "___%F__%H__%M___");
