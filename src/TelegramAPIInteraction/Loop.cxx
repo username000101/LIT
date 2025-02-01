@@ -20,7 +20,6 @@ void lit::td_api::lit_loop() {
 
     using runtime_storage::LITClient;
     using runtime_storage::LITClientId;
-    using runtime_storage::LITMutex;
 
     if (!LITClient) {
         LITClient = std::make_shared<td::ClientManager>();
@@ -52,17 +51,40 @@ void lit::td_api::lit_loop() {
             } else {
                 switch (current_authorization_state.object->get_id()) {
                     case td::td_api::authorizationStateWaitTdlibParameters::ID: {
+                        logger->log(spdlog::level::debug,
+                                    "{}: Sending tdlib parameters...",
+                                    __PRETTY_FUNCTION__);
                         td_auth::set_tdlibparameters();
                         continue;
                     }
 
                     case td::td_api::authorizationStateWaitPhoneNumber::ID: {
+                        logger->log(spdlog::level::debug,
+                                    "{}: Waiting for auth...",
+                                    __PRETTY_FUNCTION__);
                         td_auth::auth_in_account();
                         continue;
                     }
 
                     case td::td_api::authorizationStateReady::ID: {
+                        logger->log(spdlog::level::debug,
+                                    "{}: Tdlib client is ready",
+                                    __PRETTY_FUNCTION__);
                         break;
+                    }
+
+                    case td::td_api::updateConnectionState::ID: {
+                        logger->log(spdlog::level::warn,
+                                    "{}: The connection has been changed",
+                                    __PRETTY_FUNCTION__);
+                        continue;
+                    }
+
+                    default: {
+                        logger->log(spdlog::level::debug,
+                                    "{}: Unexpected response(object id: {})",
+                                    __PRETTY_FUNCTION__, current_authorization_state.object->get_id());
+                        continue;
                     }
                 }
                 break;
@@ -81,8 +103,8 @@ void lit::td_api::lit_loop() {
         auto new_update = utils::get_td_updates();
         if (!new_update.object) {
             logger->log(spdlog::level::debug,
-                        "{}: Invalid update received(perhaps there are no updates?), trying again",
-                        __PRETTY_FUNCTION__);
+                        "{}: Invalid update received(perhaps there are no updates?(requestId: {})), trying again",
+                        __PRETTY_FUNCTION__, new_update.request_id);
             continue;
         } else {
             switch (new_update.object->get_id()) {
