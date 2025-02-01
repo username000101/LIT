@@ -1,3 +1,6 @@
 [submodule "third_party/tdlib"]
 	path = third_party/tdlib
 	url = https://github.com/tdlib/td
+[submodule "third_party/yamc"]
+	path = third_party/yamc
+	url = https://github.com/yohhoy/yamc
