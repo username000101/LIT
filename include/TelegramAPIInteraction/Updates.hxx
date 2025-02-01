@@ -8,7 +8,7 @@
 
 namespace lit {
     namespace td_api {
-        td::ClientManager::Response get_response
+td::ClientManager::Response get_response
             (td::td_api::object_ptr<td::td_api::Function> req,
              td::ClientManager::RequestId req_id = runtime_storage::LITRequestId++);
     }
