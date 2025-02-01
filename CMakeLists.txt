@@ -45,7 +45,8 @@ if (NOT DEFINED API_ID OR NOT DEFINED API_HASH)
 endif()
 
 include_directories(
-	include
+    include
+    third_party
 )
 
 file(GLOB LIT "main.cxx")
