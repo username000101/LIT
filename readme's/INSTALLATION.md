@@ -23,7 +23,8 @@
 **2.**  Cloning the repository
 
 - Branch: the stable main is used by default, but you can try using experimental (be careful, changes in experimental may sometimes not even compile)
-- Cloning: git clone [--branch experimental] https://github.com/username000101/LIT
+- Cloning: git clone [--branch experimental] --depth=1 https://github.com/username000101/LIT && cd LIT
+- Updating git submodules: git submodule update --init --recursive
 
 **3.** Getting Telegram Application IDs
 
