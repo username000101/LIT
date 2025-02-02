@@ -50,8 +50,12 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
                     "{}: The LIT configuration is incomplete (the 'version' field is missing), the 'LIT_VERSION' macro will be used",
                     __PRETTY_FUNCTION__);
         version =  LIT_VERSION;
-    } else
+    } else {
+        logger->log(spdlog::level::warn,
+                    "{}: LIT version differs between config file and macro",
+                    __PRETTY_FUNCTION__);
         version = config.at("version").get<std::string>();
+    }
 
     [[unlikely]] if (!config.contains("td_settings")) {
         logger->log(spdlog::level::critical,
