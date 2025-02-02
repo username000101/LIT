@@ -23,8 +23,18 @@
 **2.**  Cloning the repository
 
 - Branch: the stable main is used by default, but you can try using experimental (be careful, changes in experimental may sometimes not even compile)
-- Cloning: git clone [--branch experimental] --depth=1 https://github.com/username000101/LIT && cd LIT
-- Updating git submodules: git submodule update --init --recursive
+- Cloning(stable branch):
+  ```bash
+  git clone --depth=1 https://github.com/username000101/LIT && cd LIT
+  ```
+- Cloning(experimental branch):
+  ```bash
+  git clone -b experimental --depth=1 https://github.com/username000101/LIT && cd LIT
+  ```
+- Updating git submodules:
+  ```bash
+  git submodule update --init --recursive
+  ```
 
 **3.** Getting Telegram Application IDs
 
@@ -33,11 +43,20 @@
 **4.** Building
 
 - Go to the project directory: cd LIT
-- Create a build directory (in the example, 'build' will be used): mkdir build && cd build
+- Create a build directory (in the example, 'build' will be used):
+  ```bash
+  mkdir build && cd build
+  ```
 - Generator: You can use both Makefile and Ninja (amazing, isn't it?)(In testing, LIT is built using Ninja)
 - The LIT install prefix: You can specify the directory where LIT will store the files, just specify the parameter -DLIT_INSTALL_PREFIX=/path/to/folder when launching CMake
-- Run cmake: cmake [-GNinja] [-DLIT_INSTALL_PREFIX=...] -DAPI_ID=<Your API_ID, which you received from my.telegram.org> -DAPI_HASH=<Your API_HASH, which you received from my.telegram.org> ..
-- If there are no errors, write cmake --build . 
+- Run cmake:
+  ```bash
+  cmake [-GNinja] [-DLIT_INSTALL_PREFIX=...] -DAPI_ID=<Your API_ID, which you received from my.telegram.org> -DAPI_HASH=<Your API_HASH, which you received from my.telegram.org> ..
+  ```
+- If there are no errors, write
+  ```bash
+  cmake --build .
+  ```
 - If there are no errors... Congratulations, you have built LIT! Run it (if you are using the default directory/other directory that requires su for writing, run LIT via sudo) and follow the instructions to log in to your account
 
 
