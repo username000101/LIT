@@ -69,7 +69,7 @@ auto install = [](std::optional<std::vector<std::string>> args) {
             auto module_object = module_config.begin();
 
             std::string new_path = (std::filesystem::path(LIT_MODULES_DIR) / std::filesystem::path(args.value()[0]).filename()).string();
-            std::filesystem::copy_file(args.value()[0], new_path);
+            std::filesystem::copy(args.value()[0], new_path, std::filesystem::copy_options::overwrite_existing);
             std::filesystem::remove(args.value()[0]);
 
             if (!module_object->contains("path"))
@@ -141,7 +141,7 @@ auto install = [](std::optional<std::vector<std::string>> args) {
             dlclose(lib);
 
             std::string new_path = (std::filesystem::path(LIT_MODULES_DIR) / std::filesystem::path(args.value()[0]).filename()).string();
-            std::filesystem::copy_file(args.value()[0], new_path);
+            std::filesystem::copy(args.value()[0], new_path, std::filesystem::copy_options::overwrite_existing);
             std::filesystem::remove(args.value()[0]);
             std::filesystem::remove(args.value()[1]);
 
@@ -186,6 +186,7 @@ std::unordered_map<std::string, void(*)(std::optional<std::vector<std::string>>)
         if (std::filesystem::exists(LIT_MODULES_CONFIG))
             std::filesystem::remove(LIT_MODULES_CONFIG);
         lit::env::setup::setup_environment();
+        std::exit(0);
     }},
 
     {"--writeconf", [](std::optional<std::vector<std::string>>) {
