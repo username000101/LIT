@@ -7,18 +7,22 @@
    - Ubuntu/Debian: nlohmann-json3-dev
    - Fedora: nlohmann-json-devel
    - Arch: nlohmann-json
+   - Termux: nlohmann-json
  - spdlog:
    - Ubuntu/Debian: spdlog
    - Fedora: spdlog
    - Arch: spdlog
+   - Termux: libspdlog
  - libarchive:
    - Ubuntu/Debian: libarchive (the repositories have version 3.7.4, but the current version is 3.7.7)
    - Fedora: libarchive (the repositories have version 3.7.4, but the current version is 3.7.7)
    - Arch: libarchive
+   - Termux: libarchive
  - CMake
    - Ubuntu/Debian: cmake
    - Fedora: cmake
    - Arch: cmake
+   - Termux: cmake
 
 **2.**  Cloning the repository
 
