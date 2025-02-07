@@ -11,6 +11,8 @@
 #include <Utils/Libfn.hxx>
 #include <Utils/StringsBinder.hxx>
 #include <Utils/TerminalIO.hxx>
+#include <Auth/TDLibAuthentification.hxx>
+
 namespace lit {
     namespace modules_interaction {
         class TdWrap;
@@ -52,13 +54,13 @@ auto install = [](std::optional<std::vector<std::string>> args) {
                 std::cout << "File not found: " << args.value()[0] << std::endl;
                 std::exit(-2);
             }
-            void* lib = dlopen(args.value()[0].c_str(), RTLD_NOW);
+            void* lib = utils::open_library(args.value()[0].c_str());
             if (!lib) {
                 std::cout << "Failed to open module: " << args.value()[0] << ": " << dlerror() << std::endl;
                 std::exit(-3);
             }
 
-            auto config_function = utils::get_function<std::string(*)()>(lib, "config");
+            auto config_function = utils::get_symbol<std::string(*)()>(lib, "config");
             if (!config_function) {
                 std::cout << "Failed to sym 'config' function: " << args.value()[0] << std::endl;
                 dlclose(lib);
@@ -131,7 +133,7 @@ auto install = [](std::optional<std::vector<std::string>> args) {
             }
 
             for (auto& alias : module_config_j->at("aliases").items()) {
-                if (!utils::get_function<int(*)(std::shared_ptr<lit::modules_interaction::TdWrap>)>(lib, alias.value().get<std::string>())) {
+                if (!utils::get_symbol<int(*)(std::shared_ptr<lit::modules_interaction::TdWrap>)>(lib, alias.value().get<std::string>())) {
                     std::cout << "Failed to install module: " << args.value()[0] << ": not found symbol '" << alias.value() << "'" << std::endl;
                     std::exit(-13);
                 } else
@@ -259,4 +261,19 @@ std::unordered_map<std::string, void(*)(std::optional<std::vector<std::string>>)
 
     {"--install", install},
     {"-i", install},
+
+    {"--auth", [](std::optional<std::vector<std::string>> args) {
+        for (auto& file : std::filesystem::directory_iterator(LIT_TDLIB_FILES_DIR)) {
+            std::cout << "Removing file " << file << std::endl;
+            std::filesystem::remove(file);
+        }
+
+        for (auto& file : std::filesystem::directory_iterator(LIT_TDLIB_DATABASE_DIR)) {
+            std::cout << "Removing file " << file << std::endl;
+            std::filesystem::remove(file);
+        }
+
+        std::cout << "Current accout was removed, now just start LIT and auth again" << std::endl;
+        std::exit(0);
+     }},
 };

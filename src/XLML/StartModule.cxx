@@ -1,11 +1,9 @@
 #include <XLML/ExecModule.hxx>
 
-#include <dlfcn.h>
 
 #include <cstdlib>
 #include <filesystem>
 #include <string>
-#include <sstream>
 #include <memory>
 #include <thread>
 #include <vector>
@@ -42,15 +40,15 @@ bool lit::xlml::start_module(std::string command, std::vector<std::string> args,
 
     std::string alias_function = module_info.aliases().at(command);
 
-    void* handle = dlopen(module_info.module_path().string().c_str(), RTLD_NOW | RTLD_GLOBAL);
+    void* handle = utils::open_library(module_info.module_path().string());
     if (!handle) {
         logger->log(spdlog::level::err,
-                    "{}: Couldn't open the module: {}",
-                    __PRETTY_FUNCTION__, dlerror());
+                    "{}: Couldn't open the module",
+                    __PRETTY_FUNCTION__);
         return false;
     }
 
-    auto module_tdwrap_layer_version = reinterpret_cast<std::tuple<int, int, int>*>(dlsym(handle, "TDWRAP_LAYER_VERSION"));
+    auto module_tdwrap_layer_version = utils::get_symbol<std::tuple<int, int, int>*>(handle, "TDWRAP_LAYER_VERSION");
     if (!module_tdwrap_layer_version) {
         logger->log(spdlog::level::warn,
                     "{}: The '{}' module does not contain a version of the TDWrap layer, the module may not be compatible.",
@@ -71,7 +69,7 @@ bool lit::xlml::start_module(std::string command, std::vector<std::string> args,
             return false;
         }
 
-    auto function = utils::get_function<int(*)(std::shared_ptr<modules_interaction::TdWrap>)>(handle, alias_function);
+    auto function = utils::get_symbol<int(*)(std::shared_ptr<modules_interaction::TdWrap>)>(handle, alias_function);
     if (!function) {
         logger->log(spdlog::level::err,
                     "{}: It looks like the module does not contain a function with the signature '{}(std::shared_ptr<lit::modules_interaction::TdWrap>)': {}",

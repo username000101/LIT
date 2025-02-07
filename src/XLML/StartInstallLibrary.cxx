@@ -23,7 +23,7 @@ bool lit::xlml::ModuleInstaller::start_install_library(const std::filesystem::pa
         return false;
     }
 
-    auto config_fn = utils::get_function<const char*(*)()>(handle, "config");
+    auto config_fn = utils::get_symbol<const char*(*)()>(handle, "config");
     if (!config_fn) {
         logger->log(spdlog::level::err,
                     "{}: Failed to call 'config' function from module '{}': {}",
