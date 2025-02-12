@@ -27,7 +27,7 @@ std::filesystem::path lit::xlml::extract_archive(const std::filesystem::path& pa
     archive_read_support_format_all(archive);
     archive_read_support_filter_all(archive);
 
-    if (archive_read_open_filename(archive, path.c_str(), 10240) != ARCHIVE_OK) {
+    if (archive_read_open_filename(archive, path.string().c_str(), 10240) != ARCHIVE_OK) {
         logger->log(spdlog::level::err,
             "{}: Failed to extract archive: libarchive returned error: {}",
             __PRETTY_FUNCTION__, archive_error_string(archive));

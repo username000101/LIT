@@ -20,5 +20,10 @@
 
 #define ENV(varname) std::getenv(varname)
 
+#if defined(WIN32)
+#define LIT_EXPORT __declspec(dllexport)
+#define __PRETTY_FUNCTION__ __FUNCSIG__
+#else
 #define LIT_EXPORT __attribute__((visibility("default")))
+#endif 
 #endif // LIT_UTILS_MACROS_HXX

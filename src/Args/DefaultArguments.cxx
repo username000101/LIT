@@ -1,7 +1,5 @@
 #include <Args/DefaultArguments.hxx>
 
-#include <dlfcn.h>
-
 #include <fstream>
 #include <iostream>
 
@@ -54,16 +52,16 @@ auto install = [](std::optional<std::vector<std::string>> args) {
                 std::cout << "File not found: " << args.value()[0] << std::endl;
                 std::exit(-2);
             }
-            void* lib = utils::open_library(args.value()[0].c_str());
+           auto lib = utils::open_library(args.value()[0].c_str());
             if (!lib) {
-                std::cout << "Failed to open module: " << args.value()[0] << ": " << dlerror() << std::endl;
+                std::cout << "Failed to open module: " << args.value()[0] << std::endl;
                 std::exit(-3);
             }
 
             auto config_function = utils::get_symbol<std::string(*)()>(lib, "config");
             if (!config_function) {
                 std::cout << "Failed to sym 'config' function: " << args.value()[0] << std::endl;
-                dlclose(lib);
+                utils::close_library(lib);
                 std::exit(-4);
             }
 
@@ -126,9 +124,9 @@ auto install = [](std::optional<std::vector<std::string>> args) {
                 std::exit(-11);
             }
 
-            void* lib = dlopen(args.value()[0].c_str(), RTLD_NOW);
+            auto lib = utils::open_library(args.value()[0].c_str());
             if (!lib) {
-                std::cout << "Failed to open module: " << args.value()[0] << ": " << dlerror() << std::endl;
+                std::cout << "Failed to open module: " << args.value()[0] << std::endl;
                 std::exit(-12);
             }
 
@@ -140,7 +138,7 @@ auto install = [](std::optional<std::vector<std::string>> args) {
                     std::cout << args.value()[0] << ": found symbol " << alias.value() << "" << std::endl;
             }
 
-            dlclose(lib);
+            utils::close_library(lib);
 
             std::string new_path = (std::filesystem::path(LIT_MODULES_DIR) / std::filesystem::path(args.value()[0]).filename()).string();
             std::filesystem::copy(args.value()[0], new_path, std::filesystem::copy_options::overwrite_existing);

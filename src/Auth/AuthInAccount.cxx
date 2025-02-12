@@ -9,6 +9,12 @@
 #include <Utils/TerminalIO.hxx>
 #include <TelegramAPIInteraction/Updates.hxx>
 
+#if defined(WIN32)
+#define clear_console std::system("cls");
+#else
+#define clear_console std::system("clear");
+#endif
+
 bool lit::td_auth::auth_in_account(std::shared_ptr<td::ClientManager> client, td::ClientManager::ClientId client_id) {
     static auto logger = spdlog::get("LIT");
     ASSERT(logger, "The 'LIT' logger is not initialized");
@@ -16,7 +22,7 @@ bool lit::td_auth::auth_in_account(std::shared_ptr<td::ClientManager> client, td
     using utils::terminal_io::bgColor;
     using utils::terminal_io::fgColor;
 
-    std::system("clear");
+    clear_console;
 
     bool have_password = false;
     std::string phone_number, code, password, password_hint;

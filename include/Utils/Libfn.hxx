@@ -6,6 +6,8 @@
 
 #include <spdlog/spdlog.h>
 
+#include <Utils/Macros.hxx>
+
 namespace utils {
 #ifdef unix
 #include <dlfcn.h>

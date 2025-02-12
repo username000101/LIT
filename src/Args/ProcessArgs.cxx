@@ -2,10 +2,14 @@
 
 #include <spdlog/spdlog.h>
 
+#include <Utils/Macros.hxx>
+
 void lit::args::process_args(int argc, char** argv, std::unordered_map<std::string,
     void(*)(std::optional<std::vector<std::string>>)> args) {
     if (args.empty()) {
-        spdlog::log(spdlog::level::warn, "{}: No arguments are set (all arguments will be skipped)", __PRETTY_FUNCTION__);
+        spdlog::log(spdlog::level::warn, 
+                    "{}: No arguments are set (all arguments will be skipped)",
+                    __PRETTY_FUNCTION__);
         return;
     }
 
@@ -22,6 +26,7 @@ void lit::args::process_args(int argc, char** argv, std::unordered_map<std::stri
         }
         else
             spdlog::log(spdlog::level::warn,
-                "The argument does not match any of the established ones (it will be skipped)");
+                        "{}: The argument does not match any of the established ones (it will be skipped)",
+                        __PRETTY_FUNCTION__);
     }
 }

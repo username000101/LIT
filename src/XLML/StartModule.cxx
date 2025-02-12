@@ -40,7 +40,7 @@ bool lit::xlml::start_module(std::string command, std::vector<std::string> args,
 
     std::string alias_function = module_info.aliases().at(command);
 
-    void* handle = utils::open_library(module_info.module_path().string());
+    auto handle = utils::open_library(module_info.module_path().string());
     if (!handle) {
         logger->log(spdlog::level::err,
                     "{}: Couldn't open the module",
@@ -72,8 +72,9 @@ bool lit::xlml::start_module(std::string command, std::vector<std::string> args,
     auto function = utils::get_symbol<int(*)(std::shared_ptr<modules_interaction::TdWrap>)>(handle, alias_function);
     if (!function) {
         logger->log(spdlog::level::err,
-                    "{}: It looks like the module does not contain a function with the signature '{}(std::shared_ptr<lit::modules_interaction::TdWrap>)': {}",
-                    __PRETTY_FUNCTION__, module_info.name(), dlerror());
+                    "{}: It looks like the module does not contain a function with the signature '{}(std::shared_ptr<lit::modules_interaction::TdWrap>)'",
+                    __PRETTY_FUNCTION__, 
+                    module_info.name());
         return false;
     } else {
         std::thread run_module_safe([function, command, message, handle, args, module_info]() {
@@ -95,7 +96,7 @@ bool lit::xlml::start_module(std::string command, std::vector<std::string> args,
             }
         });
         run_module_safe.join();
-        dlclose(handle);
+        utils::close_library(handle);
         logger->log(spdlog::level::debug,
                     "{}: The library object has been released",
                     __PRETTY_FUNCTION__);

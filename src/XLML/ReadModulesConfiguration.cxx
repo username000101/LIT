@@ -17,7 +17,8 @@ std::unordered_map<std::string, lit::modules_interaction::ModuleInfo> lit::xlml:
     if (!std::filesystem::exists(modules_configuration_file)) {
         logger->log(spdlog::level::critical,
                     "{}: Failed to read modules configuration: file '{}' doesn't exists",
-                    __PRETTY_FUNCTION__, modules_configuration_file.string());
+                    __PRETTY_FUNCTION__, 
+                    modules_configuration_file.string());
         std::abort();
     }
 
@@ -55,7 +56,8 @@ std::unordered_map<std::string, lit::modules_interaction::ModuleInfo> lit::xlml:
         if (!std::filesystem::exists(path)) {
             logger->log(spdlog::level::warn,
                         "{}: Invalid path for module: {}",
-                        __PRETTY_FUNCTION__, path.string());
+                        __PRETTY_FUNCTION__, 
+                        path.string());
             continue;
         }
 
@@ -102,7 +104,9 @@ std::unordered_map<std::string, lit::modules_interaction::ModuleInfo> lit::xlml:
         }
         logger->log(spdlog::level::debug,
                     "{}: {} aliases has been loaded for module '{}'",
-                    __PRETTY_FUNCTION__, aliases.size(), path.string());
+                    __PRETTY_FUNCTION__, 
+                    aliases.size(), 
+                    path.string());
 
         for (auto& alias : aliases) {
             logger->log(spdlog::level::debug,

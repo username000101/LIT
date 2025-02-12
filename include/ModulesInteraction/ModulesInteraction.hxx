@@ -1,8 +1,6 @@
 #ifndef LIT_MODULESINTERACTION_MODULESINTERACTION_HXX
 #define LIT_MODULESINTERACTION_MODULESINTERACTION_HXX
 
-#include <dlfcn.h>
-
 #include <csignal>
 #include <filesystem>
 #include <optional>

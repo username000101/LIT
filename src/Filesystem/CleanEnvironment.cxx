@@ -3,6 +3,8 @@
 #include <filesystem>
 #include <vector>
 
+#include <Utils/Macros.hxx>
+
 
 void lit::env::setup::clean_environment(const std::filesystem::path& PREFIX) {
     std::vector<std::string> possibly_used_dirs = {

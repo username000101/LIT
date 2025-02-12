@@ -1,6 +1,7 @@
 #ifndef LIT_UTILS_TERMINALIO_HXX
 #define LIT_UTILS_TERMINALIO_HXX
 
+#include <string>
 #include <iostream>
 #include <unordered_set>
 #include <unordered_map>

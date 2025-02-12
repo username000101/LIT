@@ -1,7 +1,5 @@
 #include <XLML/ModuleInstaller.hxx>
 
-#include <dlfcn.h>
-
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -15,20 +13,22 @@ bool lit::xlml::ModuleInstaller::start_install_library(const std::filesystem::pa
     static auto logger = spdlog::get("XLML");
     ASSERT(logger, "The 'XLML' logger is not initialized");
 
-    void* handle = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL);
+    auto handle = utils::open_library(path.string());
     if (!handle) {
         logger->log(spdlog::level::err,
-                    "{}: Failed to open module '{}': {}",
-                    __PRETTY_FUNCTION__, path.string(), dlerror());
+                    "{}: Failed to open module '{}'",
+                    __PRETTY_FUNCTION__,
+                    path.string());
         return false;
     }
 
     auto config_fn = utils::get_symbol<const char*(*)()>(handle, "config");
     if (!config_fn) {
         logger->log(spdlog::level::err,
-                    "{}: Failed to call 'config' function from module '{}': {}",
-                    __PRETTY_FUNCTION__, path.string(), dlerror());
-        dlclose(handle);
+                    "{}: Failed to call 'config' function from module '{}'",
+                    __PRETTY_FUNCTION__, 
+                    path.string());
+        utils::close_library(handle);
         return false;
     }
 
@@ -41,7 +41,7 @@ bool lit::xlml::ModuleInstaller::start_install_library(const std::filesystem::pa
     }
     auto gl_config = nlohmann::json::parse(confr);
     std::string module_config = config_fn();
-    dlclose(handle);
+    utils::close_library(handle);
     confr.close();
 
     std::filesystem::copy(path, LIT_MODULES_DIR / path.filename());

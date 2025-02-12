@@ -8,6 +8,12 @@
 
 #include <td/telegram/Client.h>
 
+#if defined(WIN32)
+#define LIT_EXPORT __declspec(dllexport)
+#else
+#define LIT_EXPORT __attribute__((visibility("default")))
+#endif 
+
 extern "C" std::tuple<int, int, int> TDWRAP_LAYER_VERSION = {1, 0, 0};
 
 namespace lit {
@@ -16,7 +22,7 @@ namespace lit {
          * TdWrap is a method of abstracting the tdlib client from the module.
          * TdWrap provides wrappers for interacting with the Telegram API without providing direct access to the TDLib instance
          */
-        class __attribute__((visibility("default"))) TdWrap {
+        class LIT_EXPORT TdWrap {
         public:
             using update_handler = td::ClientManager::Response(*)
                 (td::td_api::object_ptr<td::td_api::Function>);
