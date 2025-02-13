@@ -40,6 +40,6 @@ namespace utils {
             __PRETTY_FUNCTION__);
         return true;
     }
-}
 #endif
+}
 #endif // LIT_UTILS_ACCESS_HXX
