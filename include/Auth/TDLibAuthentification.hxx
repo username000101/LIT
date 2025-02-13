@@ -14,7 +14,7 @@ namespace lit {
                          td::ClientManager::ClientId client_id = runtime_storage::LITClientId);
 
         bool set_tdlibparameters(std::shared_ptr<td::ClientManager> client = runtime_storage::LITClient,
-                                 td::ClientManager::ClientId client_id = runtime_storage::LITClientId);
+                                 td::ClientManager::ClientId client_id = runtime_storage::LITClientId, bool test_dc = false);
     }
 }
 
