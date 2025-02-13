@@ -1,7 +1,6 @@
 #ifndef LIT_RUNTIMESTORAGE_RUNTIMESTORAGE_HXX
 #define LIT_RUNTIMESTORAGE_RUNTIMESTORAGE_HXX
 
-#include <atomic>
 #include <cstdint>
 #include <memory>
 #include <mutex>
