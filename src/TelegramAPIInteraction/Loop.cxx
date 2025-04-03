@@ -35,7 +35,7 @@ void lit::td_api::lit_loop() {
     }
 
     while (true) {
-        auto current_authorization_state = td_api::get_response(std::move(td::td_api::make_object<td::td_api::getAuthorizationState>()));
+        auto current_authorization_state = td_api::get_response(td::td_api::make_object<td::td_api::getAuthorizationState>());
         if (!current_authorization_state.object) {
             logger->log(spdlog::level::warn,
                         "{}: Returned invalid response, trying again...",
@@ -54,7 +54,11 @@ void lit::td_api::lit_loop() {
                         logger->log(spdlog::level::debug,
                                     "{}: Sending tdlib parameters...",
                                     __PRETTY_FUNCTION__);
+#if defined(LIT_TDLIB_USE_TEST_DC)
+                        td_auth::set_tdlibparameters(runtime_storage::LITClient, runtime_storage::LITClientId, true);
+#else
                         td_auth::set_tdlibparameters();
+#endif
                         continue;
                     }
 
@@ -81,7 +85,7 @@ void lit::td_api::lit_loop() {
                     }
 
                     default: {
-                        logger->log(spdlog::level::debug,
+                        logger->log(spdlog::level::trace,
                                     "{}: Unexpected response(object id: {})",
                                     __PRETTY_FUNCTION__, current_authorization_state.object->get_id());
                         continue;
