@@ -33,7 +33,7 @@ td::ClientManager::Response lit::td_api::get_response(td::td_api::object_ptr<td:
                     __PRETTY_FUNCTION__, req->get_id());
         return {};
     }
-    logger->log(spdlog::level::debug,
+    logger->log(spdlog::level::trace,
                 "{}: Getting response for request_id {} and td::td_api::Function::ID {}",
                 __PRETTY_FUNCTION__, req_id, req->get_id());
 
