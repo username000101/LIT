@@ -8,9 +8,12 @@ project(
         VERSION ${LIT_VERSION}
 )
 
+option(LIT_TDLIB_USE_TEST_DC "Use the test dc in setTdlibParameters")
+
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--export-dynamic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--export-dynamic -flto")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto")
 
 find_package(spdlog REQUIRED)
 find_package(nlohmann_json REQUIRED)
@@ -97,6 +100,10 @@ target_compile_definitions(LIT PRIVATE
     LIT_TDLIB_TIMEOUT=5.0
     LIT_TDLIB_ATTEMPTS=150
 )
+if (LIT_TDLIB_USE_TEST_DC)
+    message(NOTICE "Using the test_dc for setTdlibParameters")
+    target_compile_definitions(LIT PRIVATE LIT_TDLIB_USE_TEST_DC=1)
+endif()
 
 target_link_libraries(LIT PUBLIC
 	spdlog::spdlog
