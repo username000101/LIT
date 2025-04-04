@@ -24,10 +24,12 @@ td::ClientManager::Response lit::td_api::get_response(td::td_api::object_ptr<td:
     using runtime_storage::LITClientId;
     using runtime_storage::REQMutex;
 
+    auto blocked_requests = LITConfig->blocked_requests();
+
 
     if (req_id == 0)
         return {};
-    else if (std::find(LITConfig->blocked_requests().begin(), LITConfig->blocked_requests().end(), req->get_id()) != LITConfig->blocked_requests().end()) {
+    else if (std::find(blocked_requests.begin(), blocked_requests.end(), req->get_id()) != blocked_requests.end()) {
         logger->log(spdlog::level::warn,
                     "{}: Attempt to send an invalid request({})",
                     __PRETTY_FUNCTION__, req->get_id());
