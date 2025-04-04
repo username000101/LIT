@@ -18,8 +18,19 @@ namespace lit {
 }
 
 auto info = [](std::optional<std::vector<std::string>> args) {
-    std::cout << "LIT v" << LIT_VERSION << " " << LIT_VERSION_TYPE << std::endl
-              << "Directory: " << LIT_DIR << std::endl;
+    std::cout << "Directory: " << LIT_DIR
+              << "LIT version(by macros): " << LIT_VERSION << " " << LIT_VERSION_TYPE << std::endl;
+
+    std::ifstream config_s(LIT_CONFIG);
+    if (!config_s.is_open()) {
+        std::cout << "Failed to open " << LIT_CONFIG << std::endl;
+        std::exit(-1);
+    } else {
+        auto config = nlohmann::json::parse(config_s);
+        config_s.close();
+        if (config.contains("version"))
+            std::cout << "LIT version(by config): " << config.at("version").get<std::string>() << std::endl;
+    }
 
     std::ifstream modules_config(LIT_MODULES_CONFIG);
     if (!modules_config.is_open()) {
