@@ -51,6 +51,7 @@ lit::cfg::LITCfg lit::cfg::load_config(const std::filesystem::path& file) {
                     __PRETTY_FUNCTION__);
         version =  LIT_VERSION;
     } else {
+        if (config.at("version").get<std::string>() != LIT_VERSION)
         logger->log(spdlog::level::warn,
                     "{}: LIT version differs between config file and macro",
                     __PRETTY_FUNCTION__);
