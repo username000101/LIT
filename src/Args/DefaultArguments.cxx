@@ -18,8 +18,8 @@ namespace lit {
 }
 
 auto info = [](std::optional<std::vector<std::string>> args) {
-    std::cout << "Directory: " << LIT_DIR
-              << "LIT version(by macros): " << LIT_VERSION << " " << LIT_VERSION_TYPE << std::endl;
+    std::cout << "Directory: " << LIT_DIR << std::endl
+              << "LIT version(by macros): " << LIT_VERSION << std::endl;
 
     std::ifstream config_s(LIT_CONFIG);
     if (!config_s.is_open()) {
