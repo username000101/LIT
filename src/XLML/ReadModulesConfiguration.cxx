@@ -31,7 +31,15 @@ std::unordered_map<std::string, lit::modules_interaction::ModuleInfo> lit::xlml:
     }
 
     std::unordered_map<std::string, modules_interaction::ModuleInfo> result;
-    auto json = nlohmann::json::parse(read_file);
+    nlohmann::json json;
+    try {
+        json = nlohmann::json::parse(read_file);
+    } catch (std::exception& err) {
+        logger->log(spdlog::level::err,
+                    "{}: It looks like there are problems reading the configuration file: {}",
+                    __PRETTY_FUNCTION__, err.what());
+        std::exit(-1);
+    }
     read_file.close();
 
     if (!json.contains("modules") || json["modules"].empty()) {
